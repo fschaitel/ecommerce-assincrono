@@ -2,21 +2,25 @@
 
 Projeto desenvolvido para a disciplina de **Integração de Software - Unidade 4**.
 
-O objetivo é simular o fluxo de um e-commerce simplificado utilizando integração entre frontend, API RESTful, fila de mensagens e worker de processamento assíncrono.
+O objetivo deste projeto é simular o funcionamento de um e-commerce simplificado utilizando integração entre **Frontend**, **API RESTful**, **RabbitMQ** e um **Worker Python** responsável pelo processamento assíncrono dos pedidos.
 
 ---
 
 ## Objetivo do projeto
 
-A aplicação permite que um usuário crie um pedido por meio de uma interface web. Esse pedido é enviado para uma API em FastAPI, registrado inicialmente com status `Pendente` e publicado em uma fila RabbitMQ.
+A aplicação permite que um usuário crie um pedido por meio de uma interface web simples.
 
-Um worker em Python consome a mensagem da fila, simula o processamento do pedido e atualiza o status para `Aprovado` ou `Rejeitado`.
+Após o envio, o pedido é recebido pela API em FastAPI, registrado inicialmente com o status **Pendente** e publicado em uma fila RabbitMQ.
+
+Em seguida, um Worker em Python consome essa mensagem da fila, simula o processamento do pedido e atualiza o status final para **Aprovado** ou **Rejeitado**.
 
 ---
 
 ## Tecnologias utilizadas
 
-* HTML, CSS e JavaScript
+* HTML
+* CSS
+* JavaScript
 * Python
 * FastAPI
 * RabbitMQ
@@ -64,34 +68,48 @@ O fluxo da aplicação funciona da seguinte forma:
 Usuário
   ↓
 Frontend HTML/CSS/JS
-  ↓ requisição HTTP
+  ↓
 API FastAPI
-  ↓ registra pedido pendente
-Armazenamento em memória
-  ↓ publica mensagem
+  ↓
 RabbitMQ
-  ↓ entrega mensagem
+  ↓
 Worker Python
-  ↓ processa pedido
-API FastAPI
-  ↓ atualiza status
+  ↓
+API FastAPI atualiza o status
+  ↓
 Frontend consulta o status atualizado
 ```
 
 ---
+
 ## Diagrama de arquitetura
 
 ```mermaid
 flowchart TD
-    A[Usuário] --> B[Frontend HTML CSS JS]
-    B -->|POST /pedidos| C[API FastAPI]
-    C --> D[Pedido salvo como Pendente]
-    C -->|Publica mensagem| E[RabbitMQ]
-    E -->|Entrega mensagem| F[Worker Python]
-    F -->|Processa pedido| G[Atualiza status na API]
-    G --> H[Pedido Aprovado ou Rejeitado]
-    B -->|GET /pedidos/id| C
+    A["Usuário"] --> B["Frontend HTML/CSS/JS"]
+    B -->|"POST /pedidos"| C["API FastAPI"]
+    C --> D["Pedido salvo como Pendente"]
+    C -->|"Publica mensagem"| E["RabbitMQ"]
+    E -->|"Entrega mensagem"| F["Worker Python"]
+    F -->|"Processa pedido"| G["Atualiza status na API"]
+    G --> H["Pedido Aprovado ou Rejeitado"]
+    B -->|"GET /pedidos/id"| C
     C --> B
+```
+
+---
+
+## Explicação do fluxo assíncrono
+
+1. O usuário acessa o frontend e preenche os dados do pedido.
+2. O frontend envia uma requisição HTTP para a API.
+3. A API cria o pedido com status **Pendente**.
+4. A API publica uma mensagem na fila RabbitMQ.
+5. O Worker Python fica escutando a fila.
+6. Quando uma mensagem chega, o Worker inicia o processamento.
+7. O Worker simula um tempo de processamento.
+8. Ao final, o Worker atualiza o status do pedido para **Aprovado** ou **Rejeitado**.
+9. O frontend consulta a API e exibe o status final ao usuário.
 
 ---
 
@@ -233,7 +251,7 @@ Exemplo de resposta:
 
 ### POST /pedidos
 
-Cria um novo pedido, registra o status como `Pendente` e publica uma mensagem na fila RabbitMQ.
+Cria um novo pedido, registra o status como **Pendente** e publica uma mensagem na fila RabbitMQ.
 
 Exemplo de corpo da requisição:
 
@@ -336,9 +354,9 @@ Durante a execução do sistema, a demonstração deve mostrar:
 3. Worker Python aguardando mensagens.
 4. Frontend aberto no navegador.
 5. Criação de um novo pedido.
-6. Pedido aparecendo inicialmente como `Pendente`.
+6. Pedido aparecendo inicialmente como **Pendente**.
 7. Worker recebendo e processando a mensagem.
-8. Status sendo atualizado para `Aprovado` ou `Rejeitado`.
+8. Status sendo atualizado para **Aprovado** ou **Rejeitado**.
 9. Consulta do status final no frontend.
 10. Documentação Swagger disponível em `/docs`.
 
