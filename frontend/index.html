@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-commerce Assíncrono</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h1>E-commerce Assíncrono</h1>
+      <p class="subtitulo">
+        Simulação de pedidos com FastAPI, RabbitMQ e Worker Python.
+      </p>
+
+      <form id="formPedido">
+        <label for="cliente">Nome do cliente</label>
+        <input type="text" id="cliente" placeholder="Ex: Felipe" required>
+
+        <label for="produto">Produto</label>
+        <input type="text" id="produto" placeholder="Ex: Camiseta do Avaí" required>
+
+        <button type="submit">Fazer pedido</button>
+      </form>
+
+      <div id="resultado" class="resultado oculto">
+        <h2>Resultado do Pedido</h2>
+        <p><strong>ID:</strong> <span id="pedidoId">-</span></p>
+        <p><strong>Cliente:</strong> <span id="pedidoCliente">-</span></p>
+        <p><strong>Produto:</strong> <span id="pedidoProduto">-</span></p>
+        <p><strong>Status:</strong> <span id="pedidoStatus" class="status">-</span></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
